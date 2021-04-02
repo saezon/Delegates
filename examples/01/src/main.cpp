@@ -36,7 +36,7 @@ public:
 };
 
 int main() {
-  FOneParam delegate;
+  FOneParam delegate(2);
   Foo foo;
   delegate.addListener<Foo, &Foo::callback>(&foo);
   delegate.addListener<&Callback>();

@@ -1,26 +1,31 @@
 #pragma once
 
 #include <vector>
+#include <stdint.h>
 
 namespace jso {
   using namespace std;
   using InstancePointer = void*;
-#define EVENT_REMOVE_ALL_IMPLEMENTATION(callbacks) callbacks.clear();
-#define EVENT_ADD_LISTENER_FUNCTION_IMPLEMENTATION(callbacks, function) \
+#define EVENT_CONSTRUCTORS_IMPLEMENTATION() \
+  Event() {} \
+  Event(const uint16_t reserve_size) { _callbacks.reserve(reserve_size); } \
+  ~Event() {}
+#define EVENT_REMOVE_ALL_IMPLEMENTATION() _callbacks.clear();
+#define EVENT_ADD_LISTENER_FUNCTION_IMPLEMENTATION() \
    for (const auto& callback : _callbacks) { \
      if (callback->first == nullptr && callback->second == &FunctionCallback<Function>)\
        return; }\
    auto ptr = std::make_unique<Callback>(nullptr, &FunctionCallback<Function>); \
    _callbacks.push_back(move(ptr));
-#define EVENT_ADD_LISTENER_CLASS_METHOD_IMPLEMENTATION(callbacks, method) \
+#define EVENT_ADD_LISTENER_CLASS_METHOD_IMPLEMENTATION() \
   for (const auto& callback : _callbacks) { \
     if (callback->first == instance && \
       callback->second == &ClassMethodCallback<C, Function>) \
       return;} \
   auto ptr = make_unique<Callback>(instance, &ClassMethodCallback<C, Function>); \
   _callbacks.push_back(move(ptr));
-#define EVENT_BROADCAST_IMPLEMENTATION(callbacks, ...) \
-  for (const auto& callback : callbacks) \
+#define EVENT_BROADCAST_IMPLEMENTATION(...) \
+  for (const auto& callback : _callbacks) \
   callback->second(callback->first, __VA_ARGS__);
 
   //! NO PARAM
@@ -42,27 +47,24 @@ namespace jso {
     }
 
   public:
-    Event()
-    {
-    }
-    ~Event() {}
+    EVENT_CONSTRUCTORS_IMPLEMENTATION();
     template<void (*Function)()>
     void addListener()
     {
-      EVENT_ADD_LISTENER_FUNCTION_IMPLEMENTATION(_callbacks, &FunctionCallback<Function>);
+      EVENT_ADD_LISTENER_FUNCTION_IMPLEMENTATION();
     }
     template<class C, void (C::* Function)()>
     void addListener(C* instance)
     {
-      EVENT_ADD_LISTENER_CLASS_METHOD_IMPLEMENTATION(_callbacks, &ClassMethodCallback<C, Function>);
+      EVENT_ADD_LISTENER_CLASS_METHOD_IMPLEMENTATION();
     }
     void broadcast() const
     {
-      EVENT_BROADCAST_IMPLEMENTATION(_callbacks);
+      EVENT_BROADCAST_IMPLEMENTATION();
     }
     void removeAll()
     {
-      EVENT_REMOVE_ALL_IMPLEMENTATION(_callbacks);
+      EVENT_REMOVE_ALL_IMPLEMENTATION();
     }
 
   private:
@@ -89,25 +91,24 @@ namespace jso {
     }
 
   public:
-    Event() {}
-    ~Event() {}
+    EVENT_CONSTRUCTORS_IMPLEMENTATION();
     template<void (*Function)(ARG0)>
     void addListener()
     {
-      EVENT_ADD_LISTENER_FUNCTION_IMPLEMENTATION(_callbacks, &FunctionCallback<Function>);
+      EVENT_ADD_LISTENER_FUNCTION_IMPLEMENTATION();
     }
     template<class C, void (C::* Function)(ARG0)>
     void addListener(C* instance)
     {
-      EVENT_ADD_LISTENER_CLASS_METHOD_IMPLEMENTATION(_callbacks, &ClassMethodCallback<C, Function>);
+      EVENT_ADD_LISTENER_CLASS_METHOD_IMPLEMENTATION();
     }
     void broadcast(ARG0 arg0) const
     {
-      EVENT_BROADCAST_IMPLEMENTATION(_callbacks, arg0);
+      EVENT_BROADCAST_IMPLEMENTATION(arg0);
     }
     void removeAll()
     {
-      EVENT_REMOVE_ALL_IMPLEMENTATION(_callbacks);
+      EVENT_REMOVE_ALL_IMPLEMENTATION();
     }
 
   private:
@@ -134,25 +135,24 @@ namespace jso {
     }
 
   public:
-    Event() {}
-    ~Event() {}
-    template<void (*Function)(ARG0, ARG1)>
+    EVENT_CONSTRUCTORS_IMPLEMENTATION();
+
     void addListener()
     {
-      EVENT_ADD_LISTENER_FUNCTION_IMPLEMENTATION(_callbacks, &FunctionCallback<Function>);
+      EVENT_ADD_LISTENER_FUNCTION_IMPLEMENTATION();
     }
     template<class C, void (C::* Function)(ARG0, ARG1)>
     void addListener(C* instance)
     {
-      EVENT_ADD_LISTENER_CLASS_METHOD_IMPLEMENTATION(_callbacks, &ClassMethodCallback<C, Function>);
+      EVENT_ADD_LISTENER_CLASS_METHOD_IMPLEMENTATION();
     }
     void broadcast(ARG0 arg0, ARG1 arg1) const
     {
-      EVENT_BROADCAST_IMPLEMENTATION(_callbacks, arg0, arg1);
+      EVENT_BROADCAST_IMPLEMENTATION(arg0, arg1);
     }
     void removeAll()
     {
-      EVENT_REMOVE_ALL_IMPLEMENTATION(_callbacks);
+      EVENT_REMOVE_ALL_IMPLEMENTATION();
     }
 
   private:
