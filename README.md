@@ -63,3 +63,8 @@ delegate.removeAll();
 * Add remove binding option for an specific listener instead of having to delete them all
 * Add remove binding of all listeners of a given instance
 * Improve the performance of the events by getting rid of the vector holding all the listeners
+
+### Bibliography
+* [GameProgrammingPatterns](https://gameprogrammingpatterns.com/)
+* [Giang Tong - CPP event delegate](https://tongtunggiang.com/2017/cpp-event-delegate/)
+* [Molecular Musings - Generic, type-safe delegates and events in C++](https://tongtunggiang.com/2017/cpp-event-delegate/)
