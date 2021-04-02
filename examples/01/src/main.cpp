@@ -12,6 +12,7 @@ void NoCallback()
   cout << "HAHAHA" << endl;
 }
 DECLARE_DELEGATE_ONE_PARAM(FOneParam, int);
+DECLARE_DELEGATE_THREE_PARAM(FThreeParam, int, bool, char*);
 
 void TwoParam(float value, bool b)
 {
@@ -26,6 +27,11 @@ void Callback(int value)
   cout << "Callback: " << value << endl;
 }
 
+void CallbackThree(int i, bool b, char* string)
+{
+  cout << "Callback: " << i << " bool: " << b << " string: " << string << endl;
+}
+
 class Foo
 {
 public:
@@ -37,14 +43,17 @@ public:
 
 int main() {
   FOneParam delegate(2);
+  FThreeParam threeparam;
   Foo foo;
   delegate.addListener<Foo, &Foo::callback>(&foo);
   delegate.addListener<&Callback>();
+  threeparam.addListener<&CallbackThree>();
   //event.removeAll();
   for (auto i = 0; i < 10; i++)
   {
     delegate.broadcast(i);
   }
+  threeparam.broadcast(20, false, "Hello World");
   system("pause");
   return 0;
 }

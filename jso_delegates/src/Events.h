@@ -136,7 +136,7 @@ namespace jso {
 
   public:
     EVENT_CONSTRUCTORS_IMPLEMENTATION();
-
+    template<void (*Function)(ARG0, ARG1)>
     void addListener()
     {
       EVENT_ADD_LISTENER_FUNCTION_IMPLEMENTATION();
@@ -159,8 +159,53 @@ namespace jso {
     using CallbackArray = vector<unique_ptr<Callback>>;
     CallbackArray _callbacks;
   };
+
+  //! THREE PARAM
+  template<typename R, typename ARG0, typename ARG1, typename ARG2>
+  class Event<R(ARG0, ARG1, ARG2)>
+  {
+    typedef void (*InternalFunction)(InstancePointer, ARG0, ARG1, ARG2);
+    using Callback = std::pair<InstancePointer, InternalFunction>;
+    template<void (*Function)(ARG0, ARG1, ARG2)>
+    static void FunctionCallback(InstancePointer, ARG0 arg0, ARG1 arg1, ARG2 arg2)
+    {
+      return (Function)(arg0, arg1, arg2);
+    }
+
+    template<class C, void (C::* Function)(ARG0, ARG1)>
+    static void ClassMethodCallback(InstancePointer instance, ARG0 arg0, ARG1 arg1, ARG2 arg2)
+    {
+      return (static_cast<C*>(instance)->*Function)(arg0, arg1, arg2);
+    }
+
+  public:
+    EVENT_CONSTRUCTORS_IMPLEMENTATION();
+    template<void (*Function)(ARG0, ARG1, ARG2)>
+    void addListener()
+    {
+      EVENT_ADD_LISTENER_FUNCTION_IMPLEMENTATION();
+    }
+    template<class C, void (C::* Function)(ARG0, ARG1, ARG2)>
+    void addListener(C* instance)
+    {
+      EVENT_ADD_LISTENER_CLASS_METHOD_IMPLEMENTATION();
+    }
+    void broadcast(ARG0 arg0, ARG1 arg1, ARG2 arg2) const
+    {
+      EVENT_BROADCAST_IMPLEMENTATION(arg0, arg1, arg2);
+    }
+    void removeAll()
+    {
+      EVENT_REMOVE_ALL_IMPLEMENTATION();
+    }
+
+  private:
+    using CallbackArray = vector<unique_ptr<Callback>>;
+    CallbackArray _callbacks;
+  };
 }
 
 #define DECLARE_DELEGATE_NO_PARAM(name) using name = jso::Event<void>
 #define DECLARE_DELEGATE_ONE_PARAM(name, type) using name = jso::Event<void(type)>
 #define DECLARE_DELEGATE_TWO_PARAM(name, type1, type2) using name = jso::Event<void(type1, type2)>
+#define DECLARE_DELEGATE_THREE_PARAM(name, type1, type2, type3) using name = jso::Event<void(type1, type2, type3)>
