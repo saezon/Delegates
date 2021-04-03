@@ -1,4 +1,4 @@
-project "jso_delegates"
+project "jsolibrary"
    kind "StaticLib"
    language "c++"
    cppdialect "C++17"

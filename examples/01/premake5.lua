@@ -12,9 +12,9 @@ project "01"
       ["src"] = "**.cpp"
    }
    defines {}
-   includedirs {"src","%{wks.location}/jso_delegates/src"}
+   includedirs {"src","%{wks.location}/jsolibrary/src"}
 
-   links{"jso_delegates"}
+   -- links{"jsolibrary"}
 
 
 

@@ -1,4 +1,4 @@
-workspace "Delegates"
+workspace "jsolibrary"
    architecture "x86_64"
    configurations { "Debug", "Release" }
    flags {"MultiProcessorCompile"}
@@ -7,7 +7,7 @@ workspace "Delegates"
    filter "system:windows"
    systemversion "latest"
 
-   include "jso_delegates"
+   include "jsolibrary"
    group "examples"
       include "examples/01"
    group ""
