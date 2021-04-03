@@ -49,6 +49,8 @@ int main() {
   delegate.addListener<&Callback>();
   threeparam.addListener<&CallbackThree>();
   //event.removeAll();
+  delegate.removeListener<&Callback>();
+  delegate.removeListener<Foo, &Foo::callback>(&foo);
   for (auto i = 0; i < 10; i++)
   {
     delegate.broadcast(i);

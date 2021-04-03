@@ -27,6 +27,22 @@ namespace jso {
 #define EVENT_BROADCAST_IMPLEMENTATION(...) \
   for (const auto& callback : _callbacks) \
   callback->second(callback->first, __VA_ARGS__);
+#define EVENT_REMOVE_LISTENER_FUNCTION_IMPLEMENTATION() \
+  uint16_t i; \
+  bool found = false; \
+  for (i = 0; i < _callbacks.size(); i++) \
+    if (_callbacks[i]->first == nullptr && _callbacks[i]->second == &FunctionCallback<Function>) { \
+      found = true;\
+      break; }\
+  if (found) _callbacks.erase(_callbacks.begin() + i);
+#define EVENT_REMOVE_LISTENER_CLASS_METHOD_IMPLEMENTATION() \
+  uint16_t i; \
+  bool found = false; \
+  for (i = 0; i < _callbacks.size(); i++) \
+    if (_callbacks[i]->first == instance && _callbacks[i]->second == &ClassMethodCallback<C, Function>) { \
+      found = true;\
+      break; }\
+  if (found) _callbacks.erase(_callbacks.begin() + i);\
 
   //! NO PARAM
   template<typename T>
@@ -65,6 +81,16 @@ namespace jso {
     void removeAll()
     {
       EVENT_REMOVE_ALL_IMPLEMENTATION();
+    }
+    template<void (*Function)()>
+    void removeListener()
+    {
+      EVENT_REMOVE_LISTENER_FUNCTION_IMPLEMENTATION();
+    }
+    template<class C, void (C::* Function)()>
+    void removeListener(C* instance)
+    {
+      EVENT_REMOVE_LISTENER_CLASS_METHOD_IMPLEMENTATION();
     }
 
   private:
@@ -110,6 +136,16 @@ namespace jso {
     {
       EVENT_REMOVE_ALL_IMPLEMENTATION();
     }
+    template<void (*Function)(ARG0)>
+    void removeListener()
+    {
+      EVENT_REMOVE_LISTENER_FUNCTION_IMPLEMENTATION();
+    }
+    template<class C, void (C::* Function)(ARG0)>
+    void removeListener(C* instance)
+    {
+      EVENT_REMOVE_LISTENER_CLASS_METHOD_IMPLEMENTATION();
+    }
 
   private:
     using CallbackArray = vector<unique_ptr<Callback>>;
@@ -154,6 +190,16 @@ namespace jso {
     {
       EVENT_REMOVE_ALL_IMPLEMENTATION();
     }
+    template<void (*Function)(ARG0, ARG1)>
+    void removeListener()
+    {
+      EVENT_REMOVE_LISTENER_FUNCTION_IMPLEMENTATION();
+    }
+    template<class C, void (C::* Function)(ARG0, ARG1)>
+    void removeListener(C* instance)
+    {
+      EVENT_REMOVE_LISTENER_CLASS_METHOD_IMPLEMENTATION();
+    }
 
   private:
     using CallbackArray = vector<unique_ptr<Callback>>;
@@ -197,6 +243,16 @@ namespace jso {
     void removeAll()
     {
       EVENT_REMOVE_ALL_IMPLEMENTATION();
+    }
+    template<void (*Function)(ARG0, ARG1, ARG2)>
+    void removeListener()
+    {
+      EVENT_REMOVE_LISTENER_FUNCTION_IMPLEMENTATION();
+    }
+    template<class C, void (C::* Function)(ARG0, ARG1, ARG2)>
+    void removeListener(C* instance)
+    {
+      EVENT_REMOVE_LISTENER_CLASS_METHOD_IMPLEMENTATION();
     }
 
   private:
