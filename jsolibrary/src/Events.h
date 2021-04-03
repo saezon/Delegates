@@ -1,7 +1,57 @@
+/*
+ * MIT License
+ * Copyright (c) 2021 Josu Saez Ondozabal
+ * contact me: saezondev@gmail.com
+ * github: https://github.com/saezon/jsolibrary
+ */
 #pragma once
 
 #include <vector>
 #include <stdint.h>
+
+ /*
+  * Simple single-header library
+  * 1. Include the file
+  *    #include "Events.h"
+  * 2. Declare a delegate type with the parameter number and type you want
+  *    DECLARE_DELEGATE_NO_PARAM(FNoParamDelegate);
+  *    DECLARE_DELEGATE_ONE_PARAM(FOneParamDelegate, TYPE);
+  *    DECLARE_DELEGATE_TWO_PARAM(FTwoParamDelegate, TYPE1, TYPE2);
+  *    DECLARE_DELEGATE_THREE_PARAM(FThreeParamDelegate, TYPE1, TYPE2, TYPE3);
+  * 3. Instantiate a delegate
+  *    FOneParamDelegate delegate;
+  * 4. Add listeners to delegate
+  *    void Callback(int value)
+  *    {
+  *      cout << "Callback: " << value << endl;
+  *    }
+  *    class Foo
+  *    {
+  *    public:
+  *      void callback(int value)
+  *      {
+  *        cout << value << endl;
+  *      }
+  *    };
+  *
+  *    int main() {
+  *      FOneParam delegate;
+  *      Foo foo;
+  *      delegate.addListener<Foo, &Foo::callback>(&foo);
+  *      delegate.addListener<&Callback>();
+  *    }
+  * 5. Broadcast the event
+  *    delegate.broadcast(0);
+  * 6. Output
+  *    0
+  *    Callback: 0
+  * 7. Remove bindings
+  *    1. Remove all bindings of the event
+  *      delegate.removeAll();
+  *    2. Remove a specific listener binding from delegate
+  *      delegate.removeListener<&Callback>();
+  *      delegate.removeListener<Foo, &Foo::callback>(&foo);
+  */
 
 namespace jso {
   using namespace std;
