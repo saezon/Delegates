@@ -1,4 +1,4 @@
-project "01"
+project "aseLoader"
    kind "ConsoleApp"
    language "c++"
    cppdialect "C++17"
@@ -6,7 +6,7 @@ project "01"
    objdir ("%{wks.location}/bin-int/" .. outputdir .. "/%{prj.name}")
    debugdir ("%{wks.location}/bin/"  .. outputdir .. "/%{prj.name}")
 
-   files { "src/**.h","src/**.cpp"}
+   files { "src/**.h","src/**.cpp","%{wks.location}/jsolibrary/src/**.**" }
    vpaths{
       ["include"] = "**.h",
       ["src"] = "**.cpp"

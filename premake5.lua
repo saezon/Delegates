@@ -9,7 +9,8 @@ workspace "jsolibrary"
 
    include "jsolibrary"
    group "examples"
-      include "examples/01"
+      include "examples/delegates"
+      include "examples/aseLoader"
    group ""
 
 
